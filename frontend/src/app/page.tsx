@@ -1,10 +1,10 @@
 "use client"
 import { HeroSection } from "@/components/sections/HeroSection"
 import { ProjectsGrid } from "@/components/sections/ProjectsGrid"
-import { SiteNavbar } from "@/components/sections/SiteNavbar"
+
 import { WhyChooseUsBento } from "@/components/why-choose-us-bento"
 import GlobeDemo from "@/components/globe-demo"
-import SiteFooter from "@/components/site-footer"
+
 import { useProjects } from "@/hooks/useProjects"
 import { useRouter } from "next/navigation"
 
@@ -14,7 +14,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-neutral-950">
-      <SiteNavbar />
+
 
       <main>
         <HeroSection
@@ -43,7 +43,7 @@ export default function Home() {
           <WhyChooseUsBento />
         </div>
         <GlobeDemo />
-        <SiteFooter />
+
       </main>
     </div>
   )

@@ -3,8 +3,8 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
-import { SiteNavbar } from "@/components/sections/SiteNavbar"
-import SiteFooter from "@/components/site-footer"
+
+
 import {
   ChevronDown,
   ChevronUp,
@@ -492,7 +492,7 @@ export default function HireTalentPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-neutral-950">
-      <SiteNavbar />
+
 
       <main>
         {/* ── Hero ── */}
@@ -659,7 +659,7 @@ export default function HireTalentPage() {
             </div>
 
             {/* Developer grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
+            <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
               <AnimatePresence mode="popLayout">
                 {filtered.length > 0 ? (
                   filtered.map((dev) => <DeveloperCard key={dev.id} dev={dev} />)
@@ -718,7 +718,7 @@ export default function HireTalentPage() {
         </section>
       </main>
 
-      <SiteFooter />
+
     </div>
   )
 }

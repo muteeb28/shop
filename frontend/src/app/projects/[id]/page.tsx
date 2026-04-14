@@ -4,7 +4,7 @@ import { useParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Lens } from "@/components/ui/lens"
-import { SiteNavbar } from "@/components/sections/SiteNavbar"
+
 import { CheckCircle, ShoppingCart } from "lucide-react"
 import Link from "next/link"
 import { projects } from "@/data/projects"
@@ -155,7 +155,7 @@ export default function ProjectDetailPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <SiteNavbar />
+
 
       <section className="relative overflow-hidden bg-white dark:bg-neutral-900">
         <div className="absolute inset-0 bg-grid-slate opacity-60" />

@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   description: 'A modern e-commerce application',
 }
 
+import { SiteNavbar } from "@/components/sections/SiteNavbar"
+import SiteFooter from "@/components/site-footer"
+
 export default function RootLayout({
   children,
 }: {
@@ -16,7 +19,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <SiteNavbar />
+        {children}
+        <SiteFooter />
+      </body>
     </html>
   )
 }

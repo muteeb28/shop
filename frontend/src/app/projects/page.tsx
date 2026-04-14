@@ -1,7 +1,7 @@
 "use client"
 
 import { projects } from "@/data/projects"
-import { SiteNavbar } from "@/components/sections/SiteNavbar"
+
 import { Badge } from "@/components/ui/badge"
 import { Star } from "lucide-react"
 import Link from "next/link"
@@ -15,7 +15,7 @@ function hasLiveUrl(p: typeof projects[0]) {
 export default function ProjectsPage() {
   return (
     <div className="min-h-screen bg-white">
-      <SiteNavbar />
+
 
       <div className="container mx-auto px-6 py-16">
         <div className="mb-10">

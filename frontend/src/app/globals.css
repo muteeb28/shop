@@ -55,6 +55,9 @@
   body {
     @apply bg-background text-foreground;
   }
+  button, a, [role="button"], select, label[for] {
+    cursor: pointer;
+  }
 }
 
 @layer utilities {
@@ -71,5 +74,20 @@
       linear-gradient(90deg, rgba(15, 23, 42, 0.08) 1px, transparent 1px);
     background-position: center;
     background-size: 32px 32px;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  
+  .marquee-track {
+    animation: marquee 30s linear infinite;
+    display: flex;
+    width: max-content;
+  }
+  
+  .marquee-track:hover {
+    animation-play-state: paused;
   }
 }

@@ -10,6 +10,8 @@
 /.next/
 /out/
 
+# Keep preview images in git
+!public/previews/
 # production
 /build
 

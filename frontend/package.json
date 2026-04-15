@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "capture-previews": "node scripts/capture-previews.js",
+    "prebuild": "npm run capture-previews"
   },
   "keywords": [],
   "author": "",
@@ -41,6 +43,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
+    "puppeteer": "^24.40.0",
     "tailwindcss": "^4.1.18"
   }
 }

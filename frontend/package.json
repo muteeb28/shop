@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "capture-previews": "node scripts/capture-previews.js",
-    "prebuild": "npm run capture-previews"
+    "prebuild": "if [ \"$VERCEL\" = \"1\" ]; then echo 'Skipping capture-previews on Vercel'; else npm run capture-previews; fi"
   },
   "keywords": [],
   "author": "",

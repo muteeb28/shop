@@ -8,7 +8,23 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Mail } from 'lucide-react'
 
-export default function SendEmailModal({ isOpen, onClose, onSend, defaultTo = '', subject = '', defaultBody = '' }) {
+interface SendEmailModalProps {
+  isOpen: boolean
+  onClose: () => void
+  onSend: (data: any) => void
+  defaultTo?: string
+  subject?: string
+  defaultBody?: string
+}
+
+export default function SendEmailModal({ 
+  isOpen, 
+  onClose, 
+  onSend, 
+  defaultTo = '', 
+  subject = '', 
+  defaultBody = '' 
+}: SendEmailModalProps) {
   const [emailData, setEmailData] = useState({
     to: defaultTo,
     cc: '',
@@ -17,14 +33,14 @@ export default function SendEmailModal({ isOpen, onClose, onSend, defaultTo = ''
     body: defaultBody
   })
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setEmailData({
       ...emailData,
       [e.target.name]: e.target.value
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     onSend(emailData)
   }

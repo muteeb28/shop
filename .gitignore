@@ -5,3 +5,23 @@ node_modules/
 .env.development.local
 .env.test.local
 .env.production.local
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# AI agent folders
+.agents/
+.claude/
+.continue/
+.kiro/
+.windsurf/
+
+# Next.js
+.next/
+out/
+
+# Misc
+skills-lock.json
+*.tsc_errors.txt
+tsc_errors.txt

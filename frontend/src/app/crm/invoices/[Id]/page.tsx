@@ -71,7 +71,7 @@ const handleDownloadPDF = (invoice: any) => {
   autoTable(doc, {
     startY: 65,
     head: [["Description", "Qty", "Unit Price", "Amount"]],
-    body: invoice.items.map((item) => [
+    body: invoice.items.map((item: any) => [
       item.description,
       item.quantity,
       `$${item.unitPrice.toLocaleString()}`,
@@ -101,9 +101,9 @@ const handleDownloadPDF = (invoice: any) => {
 }
 
 
-export default function InvoiceDetailPage({ params }) {
-  const invoiceId = parseInt(params.id)
-  const invoice = mockInvoiceData[invoiceId] || mockInvoiceData[1]
+export default function InvoiceDetailPage({ params }: { params: { Id: string } }) {
+  const invoiceId = parseInt(params.Id)
+  const invoice = (mockInvoiceData as any)[invoiceId] || mockInvoiceData[1]
   const [showEmailModal, setShowEmailModal] = useState(false)
 
   // invoice printing tag
@@ -119,7 +119,7 @@ export default function InvoiceDetailPage({ params }) {
     document.body.innerHTML = originalContents;
   }
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'Paid': return 'bg-green-500 text-white'
       case 'Pending': return 'bg-yellow-500 text-white'
@@ -128,7 +128,7 @@ export default function InvoiceDetailPage({ params }) {
     }
   }
 
-  const handleSendEmail = (emailData) => {
+  const handleSendEmail = (emailData: any) => {
     console.log('Sending invoice email:', emailData)
     alert('Invoice email sent successfully!')
     setShowEmailModal(false)
@@ -217,7 +217,7 @@ export default function InvoiceDetailPage({ params }) {
                   <div className="col-span-2 text-right">Amount</div>
                 </div>
 
-                {invoice.items.map((item) => (
+                {invoice.items.map((item: any) => (
                   <div key={item.id} className="grid grid-cols-12 gap-4 text-sm py-2 border-b last:border-0">
                     <div className="col-span-6">{item.description}</div>
                     <div className="col-span-2 text-center">{item.quantity}</div>

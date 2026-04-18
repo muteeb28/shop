@@ -24,17 +24,17 @@ export default function NewInvoicePage() {
     { id: 1, description: '', quantity: 1, unitPrice: 0, amount: 0 }
   ])
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     })
   }
 
-  const handleItemChange = (id, field, value) => {
+  const handleItemChange = (id: number, field: string, value: string | number) => {
     setItems(items.map(item => {
       if (item.id === id) {
-        const updatedItem = { ...item, [field]: value }
+        const updatedItem = { ...item, [field]: value } as any
         if (field === 'quantity' || field === 'unitPrice') {
           updatedItem.amount = updatedItem.quantity * updatedItem.unitPrice
         }
@@ -48,7 +48,7 @@ export default function NewInvoicePage() {
     setItems([...items, { id: Date.now(), description: '', quantity: 1, unitPrice: 0, amount: 0 }])
   }
 
-  const removeItem = (id) => {
+  const removeItem = (id: number) => {
     if (items.length > 1) {
       setItems(items.filter(item => item.id !== id))
     }
@@ -66,7 +66,7 @@ export default function NewInvoicePage() {
     return calculateSubtotal() + calculateTax()
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     console.log('Invoice created:', { ...formData, items, total: calculateTotal() })
     alert('Invoice created successfully!')

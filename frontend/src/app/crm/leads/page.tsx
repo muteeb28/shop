@@ -69,7 +69,7 @@ export default function LeadsPage() {
     lead.email.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'New': return 'bg-blue-500 text-white'
       case 'Contacted': return 'bg-yellow-500 text-white'
@@ -79,7 +79,7 @@ export default function LeadsPage() {
     }
   }
 
-  const getScoreColor = (score) => {
+  const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-green-600'
     if (score >= 60) return 'text-yellow-600'
     return 'text-red-600'

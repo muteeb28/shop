@@ -61,7 +61,7 @@ export default function QuotationsPage() {
     quot.title.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'Draft': return 'bg-gray-500 text-white'
       case 'Sent': return 'bg-blue-500 text-white'

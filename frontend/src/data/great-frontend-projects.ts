@@ -11,7 +11,7 @@ export const SHARWINGS_PROJECTS = [
   },
   {
     name: 'barim-dubai',
-    title: 'Barim Dubai',
+    title: 'Barim Al Ain',
     description: 'Premium real estate platform for Dubai property listings and investments.',
     level: 'Popular',
     originalPrice: '83,000',
@@ -81,7 +81,7 @@ export const SHARWINGS_PROJECTS = [
   },
   {
     name: 'travel-bare',
-    title: 'Travel Bare',
+    title: 'TravelBare',
     description: 'Minimalist travel planning and booking platform for modern travelers.',
     level: 'Popular',
     originalPrice: '83,000',
@@ -101,7 +101,7 @@ export const SHARWINGS_PROJECTS = [
   },
   {
     name: 'portfolio',
-    title: 'Portfolio',
+    title: 'Advanced Portfolio',
     description: 'Professional developer portfolio showcasing projects and skills.',
     level: 'Starter',
     originalPrice: '50,000',
@@ -119,9 +119,19 @@ export const SHARWINGS_PROJECTS = [
     href: 'https://resume-optimizer-delta.vercel.app/',
     previewUrl: 'https://resume-optimizer-delta.vercel.app/',
   },
+   {
+    name: 'sharwings-ecommerce',
+    title: 'Premium Ecommerce',
+    description: 'Complete online shopping solution with payment integration and inventory management.',
+    level: 'Popular',
+    originalPrice: '83,000',
+    discountedPrice: '24,900',
+    href: 'https://sharwings.in',
+    previewUrl: 'https://sharwings.in',
+  },
   {
     name: 'trip-impression',
-    title: 'Trip Impression',
+    title: 'TripImpression',
     description: 'Travel experience sharing and trip planning social platform.',
     level: 'Popular',
     originalPrice: '83,000',

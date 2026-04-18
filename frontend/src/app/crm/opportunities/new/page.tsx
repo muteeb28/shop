@@ -23,14 +23,14 @@ export default function NewOpportunityPage() {
     description: ''
   })
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     console.log('Opportunity created:', formData)
     alert('Opportunity created successfully!')

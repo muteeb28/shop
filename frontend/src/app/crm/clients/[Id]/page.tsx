@@ -55,11 +55,11 @@ const clientData = {
   }
 }
 
-export default function ClientDetailPage({ params }) {
-  const clientId = parseInt(params.id)
-  const client = clientData[clientId] || clientData[1] // Fallback to client 1 if ID not found
+export default function ClientDetailPage({ params }: { params: { Id: string } }) {
+  const clientId = parseInt(params.Id)
+  const client = (clientData as any)[clientId] || clientData[1] // Fallback to client 1 if ID not found
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'open':
       case 'pending':
@@ -75,7 +75,7 @@ export default function ClientDetailPage({ params }) {
     }
   }
 
-  const getPriorityColor = (priority) => {
+  const getPriorityColor = (priority: string) => {
     switch (priority.toLowerCase()) {
       case 'high':
         return 'bg-red-500 text-white'
@@ -146,7 +146,7 @@ export default function ClientDetailPage({ params }) {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Open Tickets</p>
-                <p className="text-2xl font-bold">{client.tickets.filter(t => t.status !== 'Resolved').length}</p>
+                <p className="text-2xl font-bold">{client.tickets.filter((t: any) => t.status !== 'Resolved').length}</p>
               </div>
             </div>
           </CardContent>
@@ -160,7 +160,7 @@ export default function ClientDetailPage({ params }) {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Active Tasks</p>
-                <p className="text-2xl font-bold">{client.tasks.filter(t => t.status !== 'Completed').length}</p>
+                <p className="text-2xl font-bold">{client.tasks.filter((t: any) => t.status !== 'Completed').length}</p>
               </div>
             </div>
           </CardContent>
@@ -230,7 +230,7 @@ export default function ClientDetailPage({ params }) {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {client.tickets.map((ticket) => (
+                {client.tickets.map((ticket: any) => (
                   <div key={ticket.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent transition-colors">
                     <div className="flex items-center gap-4 flex-1">
                       <div className={`w-2 h-2 rounded-full ${getStatusColor(ticket.status)}`} />
@@ -259,7 +259,7 @@ export default function ClientDetailPage({ params }) {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {client.queries.map((query) => (
+                {client.queries.map((query: any) => (
                   <div key={query.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent transition-colors">
                     <div className="flex items-center gap-4 flex-1">
                       <FileText className="h-5 w-5 text-muted-foreground" />
@@ -287,7 +287,7 @@ export default function ClientDetailPage({ params }) {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {client.recentPurchases.map((purchase) => (
+                {client.recentPurchases.map((purchase: any) => (
                   <div key={purchase.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent transition-colors">
                     <div className="flex items-center gap-4 flex-1">
                       <ShoppingBag className="h-5 w-5 text-muted-foreground" />
@@ -316,7 +316,7 @@ export default function ClientDetailPage({ params }) {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {client.tasks.map((task) => (
+                {client.tasks.map((task: any) => (
                   <div key={task.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent transition-colors">
                     <div className="flex items-center gap-4 flex-1">
                       <div className={`w-2 h-2 rounded-full ${getStatusColor(task.status)}`} />
@@ -350,7 +350,7 @@ export default function ClientDetailPage({ params }) {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {client.documents.map((doc) => (
+                {client.documents.map((doc: any) => (
                   <div key={doc.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent transition-colors">
                     <div className="flex items-center gap-4 flex-1">
                       <div className="p-2 bg-primary/10 rounded-lg">

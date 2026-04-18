@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle, Zap, Shield, Globe, Smartphone, Database } from "lucide-react"
+import { Container } from "@/components/ui/container"
 import { Project } from "./ProjectCard"
 
 interface ProjectFeaturesProps {
@@ -41,27 +41,23 @@ export function ProjectFeatures({ project }: ProjectFeaturesProps) {
   ]
 
   return (
-    <div className="container mx-auto px-4 py-16">
+    <Container className="py-16">
       <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold mb-4">Features & Benefits</h2>
-        <p className="text-muted-foreground text-lg">Everything you need for a professional application</p>
+        <h2 className="font-display text-heading-lg font-semibold text-ar-foreground mb-3">Features &amp; Benefits</h2>
+        <p className="text-body-md text-ar-fg-muted">Everything you need for a professional application</p>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {features.map((feature, index) => (
-          <Card key={index} className="text-center">
-            <CardHeader>
-              <div className="mx-auto p-3 bg-primary/10 rounded-lg w-fit mb-4">
-                <feature.icon className="h-6 w-6 text-primary" />
-              </div>
-              <CardTitle className="text-lg">{feature.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">{feature.description}</p>
-            </CardContent>
-          </Card>
+          <div key={index} className="rounded-ar-md border border-ar-border bg-ar-surface p-6 text-center hover:shadow-ar-md transition-shadow">
+            <div className="mx-auto p-3 bg-ar-accent-soft rounded-ar-md w-fit mb-4">
+              <feature.icon className="h-6 w-6 text-ar-accent" />
+            </div>
+            <h3 className="font-semibold text-ar-foreground mb-2">{feature.title}</h3>
+            <p className="text-body-sm text-ar-fg-muted">{feature.description}</p>
+          </div>
         ))}
       </div>
-    </div>
+    </Container>
   )
 }

@@ -70,7 +70,7 @@ export default function InvoicesPage() {
     inv.client.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'Paid': return 'bg-green-500 text-white'
       case 'Pending': return 'bg-yellow-500 text-white'
@@ -80,17 +80,17 @@ export default function InvoicesPage() {
     }
   }
 
-  const isOverdue = (dueDate, status) => {
+  const isOverdue = (dueDate: string, status: string) => {
     if (status === 'Paid') return false
     const today = new Date()
     const due = new Date(dueDate)
     return due < today
   }
 
-  const getDaysOverdue = (dueDate) => {
+  const getDaysOverdue = (dueDate: string) => {
     const today = new Date()
     const due = new Date(dueDate)
-    const diffTime = today - due
+    const diffTime = today.getTime() - due.getTime()
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
     return diffDays > 0 ? diffDays : 0
   }

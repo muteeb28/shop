@@ -5,15 +5,14 @@ import { ProjectsGrid } from "@/components/sections/ProjectsGrid"
 import { WhyChooseUsBento } from "@/components/why-choose-us-bento"
 import Globe3DDemo from "@/components/3d-globe-demo"
 import { BuildCustomProjectModal } from "@/components/BuildCustomProjectModal"
+import { TestimonialsSection } from "@/components/sections/TestimonialsSection"
 
-import { useProjects } from "@/hooks/useProjects"
 import { useRouter } from "next/navigation"
 
 import { useEffect, useState } from "react"
 
 export default function Home() {
   const router = useRouter()
-  const { projects, handleProjectBuy, handleProjectDemo } = useProjects()
   const [hasMounted, setHasMounted] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
 
@@ -22,10 +21,10 @@ export default function Home() {
   }, [])
 
   if (!hasMounted) {
-    return <div className="min-h-screen bg-white dark:bg-neutral-950" />
+    return <div className="min-h-screen bg-ar-background dark:bg-neutral-950" />
   }
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-950">
+    <div className="min-h-screen bg-ar-background dark:bg-neutral-950">
 
       <BuildCustomProjectModal open={modalOpen} onOpenChange={setModalOpen} />
 
@@ -33,11 +32,11 @@ export default function Home() {
         <HeroSection
           title={
             <>
-              Build Full apps in days,
-              <span className="text-sky-600"> not months</span>
+              Build full apps in days,{" "}
+              <span>not months</span>
             </>
           }
-          subtitle="Turn your idea into a live product in days, not months. No hiring, no delays — just a production-ready app so you can start selling faster."
+          subtitle="Turn your idea into a live product fast. No hiring, no delays — just a production-ready app so you can start shipping sooner."
           primaryButtonText="Build Custom Project"
           secondaryButtonText="Hire Talent"
           onPrimaryClick={() => setModalOpen(true)}
@@ -46,6 +45,10 @@ export default function Home() {
 
         <div id="projects">
           <ProjectsGrid />
+        </div>
+
+        <div id="testimonials">
+          <TestimonialsSection onGetStarted={() => setModalOpen(true)} />
         </div>
 
         <div id="about">

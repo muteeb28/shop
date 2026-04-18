@@ -3,10 +3,11 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
+import { Button }    from "@/components/ui/button"
+import { Input }     from "@/components/ui/input"
+import { Textarea }  from "@/components/ui/textarea"
+import { FormGroup } from "@/components/ui/form-group"
+import { Stepper }   from "@/components/ui/stepper"
 import { Check, ChevronRight, ChevronLeft, Wrench } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -35,37 +36,22 @@ const BUDGET_RANGES = [
 ]
 
 type FormData = {
-  // Step 1 – Founder
-  name: string
-  email: string
-  phone: string
-  company: string
-  // Step 2 – Product
-  productType: string
-  description: string
-  features: string
-  // Step 3 – Budget & Maintenance
-  budget: string
-  maintenance: boolean
+  name: string; email: string; phone: string; company: string
+  productType: string; description: string; features: string
+  budget: string; maintenance: boolean
 }
 
 const initial: FormData = {
-  name: "",
-  email: "",
-  phone: "",
-  company: "",
-  productType: "",
-  description: "",
-  features: "",
-  budget: "",
-  maintenance: false,
+  name: "", email: "", phone: "", company: "",
+  productType: "", description: "", features: "",
+  budget: "", maintenance: false,
 }
 
 export function BuildCustomProjectModal({ open, onOpenChange }: BuildCustomProjectModalProps) {
-  const [step, setStep] = useState(0)
-  const [form, setForm] = useState<FormData>(initial)
+  const [step, setStep]           = useState(0)
+  const [form, setForm]           = useState<FormData>(initial)
   const [submitted, setSubmitted] = useState(false)
-  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
+  const [errors, setErrors]       = useState<Partial<Record<keyof FormData, string>>>({})
 
   const set = (field: keyof FormData, value: string | boolean) =>
     setForm((prev) => ({ ...prev, [field]: value }))
@@ -73,134 +59,79 @@ export function BuildCustomProjectModal({ open, onOpenChange }: BuildCustomProje
   const clearError = (field: keyof FormData) =>
     setErrors((prev) => { const next = { ...prev }; delete next[field]; return next })
 
-  // ── Validation per step ──────────────────────────────────────────────────────
   const validateStep = () => {
     const errs: Partial<Record<keyof FormData, string>> = {}
-
     if (step === 0) {
       if (!form.name.trim()) errs.name = "Name is required"
       if (!form.email.trim()) errs.email = "Email is required"
       else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = "Enter a valid email"
     }
-
     if (step === 1) {
-      if (!form.productType) errs.productType = "Select a product type"
+      if (!form.productType)     errs.productType  = "Select a product type"
       if (!form.description.trim()) errs.description = "Please describe your product"
     }
-
     if (step === 2) {
       if (!form.budget) errs.budget = "Select a budget range"
     }
-
     setErrors(errs)
     return Object.keys(errs).length === 0
   }
 
-  const next = () => {
-    if (!validateStep()) return
-    setStep((s) => s + 1)
-  }
-
-  const back = () => setStep((s) => s - 1)
-
-  const handleSubmit = () => {
-    if (!validateStep()) return
-    // TODO: wire to API
-    console.log("Custom project submission:", form)
-    setSubmitted(true)
-  }
+  const next  = () => { if (!validateStep()) return; setStep((s) => s + 1) }
+  const back  = () => setStep((s) => s - 1)
+  const handleSubmit = () => { if (!validateStep()) return; console.log("Submission:", form); setSubmitted(true) }
 
   const handleClose = (val: boolean) => {
     onOpenChange(val)
-    // reset after close animation finishes
-    setTimeout(() => {
-      setStep(0)
-      setForm(initial)
-      setErrors({})
-      setSubmitted(false)
-    }, 300)
+    setTimeout(() => { setStep(0); setForm(initial); setErrors({}); setSubmitted(false) }, 300)
   }
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent
         showCloseButton={!submitted}
-        className="sm:max-w-lg max-h-[90vh] overflow-y-auto p-0 gap-0"
+        className="bg-ar-surface sm:max-w-lg max-h-[90vh] overflow-y-auto p-0 gap-0 rounded-ar-lg"
       >
         {submitted ? (
           <SuccessView onClose={() => handleClose(false)} />
         ) : (
           <>
             {/* Header */}
-            <div className="px-6 pt-6 pb-4 border-b border-border">
-              <DialogHeader>
-                <DialogTitle className="text-lg font-semibold">Build a Custom Project</DialogTitle>
-                <DialogDescription>
+            <div className="px-6 pt-6 pb-5 border-b border-ar-border">
+              <DialogHeader className="mb-5">
+                <DialogTitle className="font-display text-heading-xl font-semibold text-ar-foreground">
+                  Build a Custom Project
+                </DialogTitle>
+                <DialogDescription className="text-body-sm text-ar-fg-muted">
                   Tell us about your idea — we'll get back within 24 hours.
                 </DialogDescription>
               </DialogHeader>
 
-              {/* Step indicators */}
-              <div className="flex items-center gap-0 mt-5">
-                {STEPS.map((label, i) => (
-                  <div key={i} className="flex items-center flex-1 last:flex-none">
-                    <div className="flex flex-col items-center gap-1">
-                      <div
-                        className={cn(
-                          "w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold transition-colors",
-                          i < step
-                            ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900"
-                            : i === step
-                            ? "bg-sky-600 text-white"
-                            : "bg-neutral-100 dark:bg-neutral-800 text-neutral-400"
-                        )}
-                      >
-                        {i < step ? <Check className="w-3.5 h-3.5" /> : i + 1}
-                      </div>
-                      <span
-                        className={cn(
-                          "text-[10px] font-medium hidden sm:block",
-                          i === step ? "text-neutral-900 dark:text-white" : "text-neutral-400"
-                        )}
-                      >
-                        {label}
-                      </span>
-                    </div>
-                    {i < STEPS.length - 1 && (
-                      <div
-                        className={cn(
-                          "flex-1 h-px mx-2 transition-colors",
-                          i < step ? "bg-neutral-900 dark:bg-white" : "bg-neutral-200 dark:bg-neutral-700"
-                        )}
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
+              <Stepper steps={STEPS} current={step + 1} />
             </div>
 
             {/* Form body */}
-            <div className="px-6 py-5 min-h-[280px]">
+            <div className="px-6 py-6 min-h-[280px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step}
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: 16 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
+                  exit={{ opacity: 0, x: -16 }}
                   transition={{ duration: 0.18 }}
                 >
                   {step === 0 && <FounderStep form={form} set={set} errors={errors} clearError={clearError} />}
                   {step === 1 && <ProductStep form={form} set={set} errors={errors} clearError={clearError} />}
-                  {step === 2 && <BudgetStep form={form} set={set} errors={errors} clearError={clearError} />}
+                  {step === 2 && <BudgetStep  form={form} set={set} errors={errors} clearError={clearError} />}
                 </motion.div>
               </AnimatePresence>
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-4 border-t border-border flex justify-between items-center bg-muted/30 rounded-b-xl">
+            <div className="px-6 py-4 border-t border-ar-border bg-ar-surface-muted/50 rounded-b-ar-lg flex justify-between items-center">
               <Button
-                variant="ghost"
-                size="sm"
+                variant="ar-ghost"
+                size="ar-sm"
                 onClick={back}
                 disabled={step === 0}
                 className={cn(step === 0 && "invisible")}
@@ -209,19 +140,11 @@ export function BuildCustomProjectModal({ open, onOpenChange }: BuildCustomProje
               </Button>
 
               {step < STEPS.length - 1 ? (
-                <Button
-                  size="sm"
-                  className="bg-neutral-900 text-white hover:bg-neutral-700 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200 px-5"
-                  onClick={next}
-                >
+                <Button variant="ar-primary" size="ar-sm" onClick={next}>
                   Continue <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
               ) : (
-                <Button
-                  size="sm"
-                  className="bg-sky-600 hover:bg-sky-700 text-white px-6"
-                  onClick={handleSubmit}
-                >
+                <Button variant="ar-primary" size="ar-sm" className="px-6" onClick={handleSubmit}>
                   Submit Request
                 </Button>
               )}
@@ -233,76 +156,45 @@ export function BuildCustomProjectModal({ open, onOpenChange }: BuildCustomProje
   )
 }
 
-// ── Step 1: Founder Details ──────────────────────────────────────────────────
+/* ── Step 1: Founder Details ── */
 
-function FounderStep({
-  form, set, errors, clearError,
-}: {
-  form: FormData
-  set: (k: keyof FormData, v: string | boolean) => void
-  errors: Partial<Record<keyof FormData, string>>
-  clearError: (k: keyof FormData) => void
-}) {
+function FounderStep({ form, set, errors, clearError }: StepProps) {
   return (
     <div className="space-y-4">
-      <p className="text-sm text-muted-foreground mb-4">Let's start with who you are.</p>
-
+      <p className="text-body-sm text-ar-fg-muted mb-4">Let's start with who you are.</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Field label="Full Name *" error={errors.name}>
-          <Input
-            placeholder="Jane Doe"
-            value={form.name}
-            onChange={(e) => { set("name", e.target.value); clearError("name") }}
-            className={errors.name ? "border-destructive" : ""}
-          />
-        </Field>
+        <FormGroup label="Full Name" htmlFor="name" required error={errors.name}>
+          <Input id="name" variant="ar" placeholder="Jane Doe"
+            value={form.name} onChange={(e) => { set("name", e.target.value); clearError("name") }} />
+        </FormGroup>
 
-        <Field label="Work Email *" error={errors.email}>
-          <Input
-            type="email"
-            placeholder="jane@startup.com"
-            value={form.email}
-            onChange={(e) => { set("email", e.target.value); clearError("email") }}
-            className={errors.email ? "border-destructive" : ""}
-          />
-        </Field>
+        <FormGroup label="Work Email" htmlFor="email" required error={errors.email}>
+          <Input id="email" variant="ar" type="email" placeholder="jane@startup.com"
+            value={form.email} onChange={(e) => { set("email", e.target.value); clearError("email") }} />
+        </FormGroup>
 
-        <Field label="Phone">
-          <Input
-            type="tel"
-            placeholder="+1 555 000 0000"
-            value={form.phone}
-            onChange={(e) => set("phone", e.target.value)}
-          />
-        </Field>
+        <FormGroup label="Phone" htmlFor="phone">
+          <Input id="phone" variant="ar" type="tel" placeholder="+1 555 000 0000"
+            value={form.phone} onChange={(e) => set("phone", e.target.value)} />
+        </FormGroup>
 
-        <Field label="Company / Organisation">
-          <Input
-            placeholder="Acme Inc."
-            value={form.company}
-            onChange={(e) => set("company", e.target.value)}
-          />
-        </Field>
+        <FormGroup label="Company / Organisation" htmlFor="company">
+          <Input id="company" variant="ar" placeholder="Acme Inc."
+            value={form.company} onChange={(e) => set("company", e.target.value)} />
+        </FormGroup>
       </div>
     </div>
   )
 }
 
-// ── Step 2: Product Details ──────────────────────────────────────────────────
+/* ── Step 2: Product Details ── */
 
-function ProductStep({
-  form, set, errors, clearError,
-}: {
-  form: FormData
-  set: (k: keyof FormData, v: string | boolean) => void
-  errors: Partial<Record<keyof FormData, string>>
-  clearError: (k: keyof FormData) => void
-}) {
+function ProductStep({ form, set, errors, clearError }: StepProps) {
   return (
     <div className="space-y-4">
-      <p className="text-sm text-muted-foreground mb-4">Tell us about what you want to build.</p>
+      <p className="text-body-sm text-ar-fg-muted mb-4">Tell us about what you want to build.</p>
 
-      <Field label="Product Type *" error={errors.productType}>
+      <FormGroup label="Product Type" required error={errors.productType}>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {PRODUCT_TYPES.map((type) => (
             <button
@@ -310,55 +202,41 @@ function ProductStep({
               type="button"
               onClick={() => { set("productType", type); clearError("productType") }}
               className={cn(
-                "rounded-lg border px-3 py-2 text-xs font-medium text-left transition-colors cursor-pointer",
+                "rounded-ar-md border px-3 py-2 text-body-sm font-medium text-left transition-colors cursor-pointer",
                 form.productType === type
-                  ? "border-sky-600 bg-sky-50 dark:bg-sky-950 text-sky-700 dark:text-sky-300"
-                  : "border-border hover:border-neutral-400 dark:hover:border-neutral-500 text-muted-foreground hover:text-foreground"
+                  ? "border-ar-accent bg-ar-accent-soft text-ar-accent-soft-fg"
+                  : "border-ar-border bg-ar-surface text-ar-fg-muted hover:border-ar-border-strong hover:text-ar-foreground"
               )}
             >
               {type}
             </button>
           ))}
         </div>
-        {errors.productType && <p className="text-destructive text-xs mt-1">{errors.productType}</p>}
-      </Field>
+      </FormGroup>
 
-      <Field label="Product Description *" error={errors.description}>
-        <Textarea
-          placeholder="Describe your product idea in a few sentences…"
-          value={form.description}
-          onChange={(e) => { set("description", e.target.value); clearError("description") }}
-          className={cn("min-h-20 resize-none", errors.description ? "border-destructive" : "")}
-        />
-      </Field>
+      <FormGroup label="Product Description" required error={errors.description}>
+        <Textarea variant="ar" placeholder="Describe your product idea in a few sentences…"
+          value={form.description} className="min-h-[5rem]"
+          onChange={(e) => { set("description", e.target.value); clearError("description") }} />
+      </FormGroup>
 
-      <Field label="Key Features (optional)">
-        <Textarea
-          placeholder="List the main features you have in mind, one per line…"
-          value={form.features}
-          onChange={(e) => set("features", e.target.value)}
-          className="min-h-16 resize-none"
-        />
-      </Field>
+      <FormGroup label="Key Features" hint="Optional — list the main features you have in mind, one per line.">
+        <Textarea variant="ar" placeholder="e.g. User authentication, dashboard, payment checkout…"
+          value={form.features} className="min-h-[4rem]"
+          onChange={(e) => set("features", e.target.value)} />
+      </FormGroup>
     </div>
   )
 }
 
-// ── Step 3: Budget & Maintenance ─────────────────────────────────────────────
+/* ── Step 3: Budget & Maintenance ── */
 
-function BudgetStep({
-  form, set, errors, clearError,
-}: {
-  form: FormData
-  set: (k: keyof FormData, v: string | boolean) => void
-  errors: Partial<Record<keyof FormData, string>>
-  clearError: (k: keyof FormData) => void
-}) {
+function BudgetStep({ form, set, errors, clearError }: StepProps) {
   return (
     <div className="space-y-5">
-      <p className="text-sm text-muted-foreground mb-4">Almost done — help us understand scope.</p>
+      <p className="text-body-sm text-ar-fg-muted mb-4">Almost done — help us understand scope.</p>
 
-      <Field label="Estimated Budget *" error={errors.budget}>
+      <FormGroup label="Estimated Budget" required error={errors.budget}>
         <div className="flex flex-col gap-2">
           {BUDGET_RANGES.map((range) => (
             <button
@@ -366,55 +244,51 @@ function BudgetStep({
               type="button"
               onClick={() => { set("budget", range); clearError("budget") }}
               className={cn(
-                "rounded-lg border px-4 py-2.5 text-sm font-medium text-left transition-colors flex items-center justify-between cursor-pointer",
+                "rounded-ar-md border px-4 py-2.5 text-body-sm font-medium text-left flex items-center justify-between transition-colors cursor-pointer",
                 form.budget === range
-                  ? "border-sky-600 bg-sky-50 dark:bg-sky-950 text-sky-700 dark:text-sky-300"
-                  : "border-border hover:border-neutral-400 dark:hover:border-neutral-500 text-muted-foreground hover:text-foreground"
+                  ? "border-ar-accent bg-ar-accent-soft text-ar-accent-soft-fg"
+                  : "border-ar-border bg-ar-surface text-ar-fg-muted hover:border-ar-border-strong hover:text-ar-foreground"
               )}
             >
               {range}
-              {form.budget === range && <Check className="w-4 h-4 text-sky-600" />}
+              {form.budget === range && <Check className="w-4 h-4 text-ar-accent" />}
             </button>
           ))}
         </div>
-        {errors.budget && <p className="text-destructive text-xs mt-1">{errors.budget}</p>}
-      </Field>
+      </FormGroup>
 
       {/* Maintenance opt-in */}
-      <div
+      <button
+        type="button"
         onClick={() => set("maintenance", !form.maintenance)}
         className={cn(
-          "rounded-xl border p-4 flex items-start gap-3 cursor-pointer transition-colors",
+          "w-full text-left rounded-ar-md border p-4 flex items-start gap-3 cursor-pointer transition-colors",
           form.maintenance
-            ? "border-sky-600 bg-sky-50 dark:bg-sky-950"
-            : "border-border hover:border-neutral-400 dark:hover:border-neutral-500"
+            ? "border-ar-accent bg-ar-accent-soft"
+            : "border-ar-border bg-ar-surface hover:border-ar-border-strong"
         )}
       >
-        <div
-          className={cn(
-            "mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors",
-            form.maintenance
-              ? "border-sky-600 bg-sky-600"
-              : "border-neutral-300 dark:border-neutral-600"
-          )}
-        >
-          {form.maintenance && <Check className="w-3 h-3 text-white" />}
+        <div className={cn(
+          "mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors",
+          form.maintenance ? "border-ar-accent bg-ar-accent" : "border-ar-border"
+        )}>
+          {form.maintenance && <Check className="w-3 h-3 text-ar-accent-fg" />}
         </div>
         <div>
           <div className="flex items-center gap-2">
-            <Wrench className="w-4 h-4 text-muted-foreground" />
-            <span className="text-sm font-medium">Include Post-Delivery Maintenance</span>
+            <Wrench className="w-4 h-4 text-ar-fg-subtle" />
+            <span className="text-body-sm font-medium text-ar-foreground">Include Post-Delivery Maintenance</span>
           </div>
-          <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+          <p className="text-body-sm text-ar-fg-muted mt-1 leading-relaxed">
             Opt in for ongoing bug fixes, updates, and performance monitoring after your product goes live. Billed monthly.
           </p>
         </div>
-      </div>
+      </button>
     </div>
   )
 }
 
-// ── Success View ─────────────────────────────────────────────────────────────
+/* ── Success View ── */
 
 function SuccessView({ onClose }: { onClose: () => void }) {
   return (
@@ -423,37 +297,26 @@ function SuccessView({ onClose }: { onClose: () => void }) {
       animate={{ opacity: 1, scale: 1 }}
       className="flex flex-col items-center justify-center text-center px-8 py-14 gap-4"
     >
-      <div className="w-14 h-14 rounded-full bg-sky-100 dark:bg-sky-950 flex items-center justify-center mb-2">
-        <Check className="w-7 h-7 text-sky-600" />
+      <div className="w-14 h-14 rounded-ar-pill bg-ar-accent-soft flex items-center justify-center mb-2">
+        <Check className="w-7 h-7 text-ar-accent" />
       </div>
-      <h3 className="text-lg font-semibold text-neutral-900 dark:text-white">Request Submitted!</h3>
-      <p className="text-sm text-muted-foreground max-w-xs">
-        Thanks for reaching out. Our team will review your project and get back to you within <span className="font-medium text-foreground">24 hours</span>.
+      <h3 className="font-display text-heading-xl font-semibold text-ar-foreground">Request Submitted!</h3>
+      <p className="text-body-sm text-ar-fg-muted max-w-xs">
+        Thanks for reaching out. Our team will review your project and get back to you within{" "}
+        <span className="font-semibold text-ar-foreground">24 hours</span>.
       </p>
-      <Button
-        className="mt-4 bg-neutral-900 text-white hover:bg-neutral-700 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200 px-8"
-        onClick={onClose}
-      >
+      <Button variant="ar-primary" size="ar-md" className="mt-4 px-8" onClick={onClose}>
         Done
       </Button>
     </motion.div>
   )
 }
 
-// ── Shared Field wrapper ──────────────────────────────────────────────────────
+/* ── Shared step prop type ── */
 
-function Field({
-  label, error, children,
-}: {
-  label: string
-  error?: string
-  children: React.ReactNode
-}) {
-  return (
-    <div className="space-y-1.5">
-      <Label className="text-xs font-medium text-neutral-700 dark:text-neutral-300">{label}</Label>
-      {children}
-      {error && <p className="text-destructive text-xs">{error}</p>}
-    </div>
-  )
+type StepProps = {
+  form: FormData
+  set: (k: keyof FormData, v: string | boolean) => void
+  errors: Partial<Record<keyof FormData, string>>
+  clearError: (k: keyof FormData) => void
 }

@@ -1,45 +1,24 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Moon, Sun } from "lucide-react"
-import {
-  Navbar,
-  NavBody,
-  NavItems,
-  MobileNav,
-  NavbarLogo,
-  NavbarButton,
-  MobileNavHeader,
-  MobileNavToggle,
-  MobileNavMenu,
-} from "@/components/ui/resizable-navbar"
+import { Instagram, MessageCircle, Facebook, Moon, Sun, Menu, X } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 const navItems = [
-  {
-    name: "Projects",
-    link: "#projects",
-  },
-  {
-    name: "Hire Talent",
-    link: "/hire-talent",
-  },
-  {
-    name: "About",
-    link: "#about",
-  },
-  {
-    name: "Contact",
-    link: "#contact",
-  },
+  { name: "Home",        link: "/" },
+  { name: "Projects",    link: "#projects" },
+  { name: "Hire Talent", link: "/hire-talent" },
+  { name: "About",       link: "#about" },
+  { name: "Contact",     link: "#contact" },
 ]
 
 export function SiteNavbar() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isDark, setIsDark] = useState(false)
+  const [isDark, setIsDark]     = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
     if (typeof window === "undefined") return
-    const root = window.document.documentElement
+    const root   = window.document.documentElement
     const stored = window.localStorage.getItem("site-theme")
     if (stored === "dark") {
       root.classList.add("dark")
@@ -64,81 +43,133 @@ export function SiteNavbar() {
   }
 
   return (
-    <Navbar>
-      {/* Desktop Navigation */}
-      <NavBody>
-        <NavbarLogo />
-        <NavItems items={navItems} />
-        <div className="flex items-center gap-3">
+    <>
+      {/* ── Top header ─────────────────────────────────────────────────── */}
+      <header className="bg-ar-surface dark:bg-neutral-950 px-6 md:px-12 py-5 lg:py-6 flex items-center justify-between border-b border-ar-border/40 dark:border-neutral-800/40">
+
+        {/* Logo */}
+        <a
+          href="/"
+          className="font-display italic text-[1.7rem] font-semibold text-ar-foreground dark:text-white tracking-tight leading-none select-none"
+        >
+          Jobflix
+        </a>
+
+        {/* Desktop: availability + socials + theme toggle */}
+        <div className="hidden md:flex items-center gap-8">
+
+          {/* Availability pulse */}
+          <div className="flex items-center gap-3 py-1">
+            <span className="relative flex h-[9px] w-[9px]">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-[9px] w-[9px] bg-emerald-500" />
+            </span>
+            <span className="text-caption text-ar-fg-muted dark:text-neutral-400 font-medium tracking-tight">
+              available for work
+            </span>
+          </div>
+
+          <div className="h-6 w-px bg-ar-border dark:bg-neutral-800" />
+
+          {/* Social icons */}
+          <div className="flex items-center gap-6">
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="text-ar-fg-muted hover:text-ar-accent dark:text-neutral-400 dark:hover:text-white transition-colors duration-ar-fast"
+            >
+              <Instagram className="h-5 w-5" strokeWidth={1.5} />
+            </a>
+            <div className="h-4 w-px bg-ar-border dark:bg-neutral-800" />
+            <a
+              href="https://wa.me"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+              className="text-ar-fg-muted hover:text-ar-accent dark:text-neutral-400 dark:hover:text-white transition-colors duration-ar-fast"
+            >
+              <MessageCircle className="h-5 w-5" strokeWidth={1.5} />
+            </a>
+            <div className="h-4 w-px bg-ar-border dark:bg-neutral-800" />
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              className="text-ar-fg-muted hover:text-ar-accent dark:text-neutral-400 dark:hover:text-white transition-colors duration-ar-fast"
+            >
+              <Facebook className="h-5 w-5" strokeWidth={1.5} />
+            </a>
+          </div>
+
+          <div className="h-6 w-px bg-ar-border dark:bg-neutral-800" />
+
+          {/* Theme toggle */}
           <button
             type="button"
             onClick={toggleTheme}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-600 transition hover:border-zinc-300 dark:border-zinc-700 dark:bg-neutral-900 dark:text-white"
+            aria-label="Toggle theme"
+            className="text-ar-fg-subtle hover:text-ar-foreground dark:text-neutral-400 dark:hover:text-white transition-colors duration-ar-fast"
           >
-            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            {isDark
+              ? <Sun  className="h-5 w-5" strokeWidth={1.5} />
+              : <Moon className="h-5 w-5" strokeWidth={1.5} />
+            }
           </button>
-          <NavbarButton variant="primary" href="#contact">
-            Contact Us
-          </NavbarButton>
         </div>
-      </NavBody>
 
-      {/* Mobile Navigation */}
-      <MobileNav>
-        <MobileNavHeader>
-          <NavbarLogo />
-          <MobileNavToggle
-            isOpen={isMobileMenuOpen}
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          />
-        </MobileNavHeader>
-
-        <MobileNavMenu
-          isOpen={isMobileMenuOpen}
-          onClose={() => setIsMobileMenuOpen(false)}
+        {/* Mobile: hamburger */}
+        <button
+          type="button"
+          className="md:hidden text-ar-fg-muted dark:text-neutral-400"
+          onClick={() => setMobileOpen((v) => !v)}
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileOpen}
         >
-          {navItems.map((item, idx) => (
+          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+      </header>
+
+      {/* ── Mobile menu drawer ─────────────────────────────────────────── */}
+      {mobileOpen && (
+        <div className="md:hidden bg-ar-surface dark:bg-neutral-950 border-b border-ar-border dark:border-neutral-800 px-6 py-6 flex flex-col gap-4">
+          {navItems.map((item) => (
             <a
-              key={`mobile-link-${idx}`}
+              key={item.name}
               href={item.link}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="relative text-neutral-600 dark:text-neutral-300"
+              onClick={() => setMobileOpen(false)}
+              className="text-body-md font-medium text-ar-foreground dark:text-neutral-200 hover:text-ar-accent dark:hover:text-white transition-colors duration-ar-fast"
             >
-              <span className="block">{item.name}</span>
+              {item.name}
             </a>
           ))}
-          <div className="flex w-full flex-col gap-3">
-            <button
-              type="button"
-              onClick={() => {
-                toggleTheme()
-                setIsMobileMenuOpen(false)
-              }}
-              className="flex items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-600 shadow-sm hover:border-zinc-300 dark:border-zinc-700 dark:bg-neutral-900 dark:text-white"
+          <Button variant="ar-primary" size="ar-sm" className="mt-2 w-full" asChild>
+            <a href="#contact" onClick={() => setMobileOpen(false)}>
+              Get Started
+            </a>
+          </Button>
+        </div>
+      )}
+
+      {/* ── Floating pill nav (desktop, fixed bottom) ──────────────────── */}
+      <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 hidden md:flex">
+        <div className="flex items-center gap-1 rounded-ar-pill bg-ar-surface/90 backdrop-blur-md dark:bg-neutral-900/90 shadow-ar-md border border-ar-border/50 dark:border-neutral-800 px-3 py-2.5">
+          {navItems.map((item) => (
+            <a
+              key={item.name}
+              href={item.link}
+              className="px-5 py-2 text-body-sm font-medium text-ar-fg-muted dark:text-neutral-400 hover:text-ar-foreground dark:hover:text-white rounded-ar-pill transition-colors duration-ar-fast whitespace-nowrap"
             >
-              {isDark ? (
-                <>
-                  <Sun className="h-4 w-4" />
-                  Light mode
-                </>
-              ) : (
-                <>
-                  <Moon className="h-4 w-4" />
-                  Dark mode
-                </>
-              )}
-            </button>
-            <NavbarButton
-              onClick={() => setIsMobileMenuOpen(false)}
-              variant="primary"
-              className="w-full"
-              href="#contact"
-            >
-              Contact Us
-            </NavbarButton>
-          </div>
-        </MobileNavMenu>
-      </MobileNav>
-    </Navbar>
+              {item.name}
+            </a>
+          ))}
+          <Button variant="ar-primary" size="ar-sm" className="ml-2 whitespace-nowrap" asChild>
+            <a href="#contact">Get Started</a>
+          </Button>
+        </div>
+      </nav>
+    </>
   )
 }

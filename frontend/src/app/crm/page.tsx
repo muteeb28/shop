@@ -166,7 +166,7 @@ export default function Dashboard() {
                       <div className="flex items-center space-x-2">
                         <span className="text-muted-foreground">${item.revenue.toLocaleString()}</span>
                         <span className="text-xs text-muted-foreground">/ ${item.target.toLocaleString()}</span>
-                        {achieved && <Badge variant="success" className="bg-green-500 text-white">✓</Badge>}
+                        {achieved && <Badge variant="default" className="bg-green-500 text-white">✓</Badge>}
                       </div>
                     </div>
                     <Progress value={percentage} className="h-2" />

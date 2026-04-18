@@ -6,7 +6,18 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Plus, GripVertical, User, Calendar, AlertCircle } from 'lucide-react'
 
-const initialTickets = {
+interface Ticket {
+  id: number
+  title: string
+  client: string
+  priority: string
+  assignee: string
+  dueDate: string
+}
+
+type KanbanData = Record<string, Ticket[]>
+
+const initialTickets: KanbanData = {
   new: [
     { id: 1, title: 'Setup cloud infrastructure', client: 'Acme Corp', priority: 'High', assignee: 'John Smith', dueDate: '2025-06-20' },
     { id: 2, title: 'Review security requirements', client: 'TechVision', priority: 'Medium', assignee: 'Sarah Johnson', dueDate: '2025-06-22' }
@@ -33,11 +44,11 @@ const columns = [
 ]
 
 export default function KanbanPage() {
-  const [tickets, setTickets] = useState(initialTickets)
-  const [draggedTicket, setDraggedTicket] = useState(null)
-  const [draggedFrom, setDraggedFrom] = useState(null)
+  const [tickets, setTickets] = useState<KanbanData>(initialTickets)
+  const [draggedTicket, setDraggedTicket] = useState<Ticket | null>(null)
+  const [draggedFrom, setDraggedFrom] = useState<string | null>(null)
 
-  const getPriorityColor = (priority) => {
+  const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'High': return 'bg-red-500 text-white'
       case 'Medium': return 'bg-orange-500 text-white'
@@ -46,16 +57,16 @@ export default function KanbanPage() {
     }
   }
 
-  const handleDragStart = (ticket, columnId) => {
+  const handleDragStart = (ticket: Ticket, columnId: string) => {
     setDraggedTicket(ticket)
     setDraggedFrom(columnId)
   }
 
-  const handleDragOver = (e) => {
+  const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
   }
 
-  const handleDrop = (columnId) => {
+  const handleDrop = (columnId: string) => {
     if (!draggedTicket || !draggedFrom) return
 
     if (draggedFrom === columnId) {
@@ -65,7 +76,7 @@ export default function KanbanPage() {
     }
 
     // Remove ticket from source column
-    const sourceTickets = tickets[draggedFrom].filter(t => t.id !== draggedTicket.id)
+    const sourceTickets = tickets[draggedFrom].filter((t: Ticket) => t.id !== draggedTicket.id)
     
     // Add ticket to destination column
     const destTickets = [...tickets[columnId], draggedTicket]

@@ -1,8 +1,8 @@
 "use client"
 
 import { projects } from "@/data/projects"
-
-import { Badge } from "@/components/ui/badge"
+import { Tag } from "@/components/ui/tag"
+import { Container } from "@/components/ui/container"
 import { Star } from "lucide-react"
 import Link from "next/link"
 
@@ -14,13 +14,11 @@ function hasLiveUrl(p: typeof projects[0]) {
 
 export default function ProjectsPage() {
   return (
-    <div className="min-h-screen bg-white">
-
-
-      <div className="container mx-auto px-6 py-16">
+    <div className="min-h-screen bg-ar-background">
+      <Container className="py-16">
         <div className="mb-10">
-          <h1 className="text-4xl font-bold text-neutral-900">All Projects</h1>
-          <p className="mt-2 text-neutral-500">
+          <h1 className="font-display text-heading-xl font-semibold text-ar-foreground">All Projects</h1>
+          <p className="mt-2 text-body-md text-ar-fg-muted">
             {projects.length} production-ready applications — pick one and ship faster.
           </p>
         </div>
@@ -31,10 +29,10 @@ export default function ProjectsPage() {
             return (
               <div
                 key={project.id}
-                className="group relative overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm hover:shadow-xl transition-all duration-300"
+                className="group relative overflow-hidden rounded-ar-md border border-ar-border bg-ar-surface shadow-ar-sm hover:shadow-ar-md transition-all duration-300"
               >
                 {/* Preview area */}
-                <div className="relative h-44 overflow-hidden bg-neutral-50">
+                <div className="relative h-44 overflow-hidden bg-ar-surface-muted">
                   {live ? (
                     <iframe
                       src={project.previewUrl}
@@ -51,27 +49,27 @@ export default function ProjectsPage() {
                     />
                   ) : (
                     <div className="flex h-full items-center justify-center">
-                      <div className="p-4 rounded-2xl bg-white border border-neutral-200 shadow-sm">
-                        <project.icon className="h-10 w-10 text-neutral-300" />
+                      <div className="p-4 rounded-ar-md bg-ar-surface border border-ar-border shadow-ar-sm">
+                        <project.icon className="h-10 w-10 text-ar-fg-subtle" />
                       </div>
                     </div>
                   )}
 
                   {/* Bottom fade */}
-                  <div className="absolute bottom-0 inset-x-0 h-12 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+                  <div className="absolute bottom-0 inset-x-0 h-12 bg-gradient-to-t from-ar-surface to-transparent pointer-events-none" />
 
                   {/* Hover overlay buttons */}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-300 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100">
                     <Link
                       href={`/projects/${project.id}`}
-                      className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-neutral-900 shadow hover:bg-neutral-100 transition-colors"
+                      className="rounded-ar-md bg-ar-surface px-4 py-2 text-body-sm font-semibold text-ar-foreground shadow hover:bg-ar-surface-muted transition-colors"
                     >
                       View Details
                     </Link>
                     <button
                       disabled={!live}
                       onClick={() => live && window.open(project.previewUrl, "_blank", "noopener,noreferrer")}
-                      className="rounded-lg border border-white/60 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm hover:bg-white/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="rounded-ar-md border border-white/60 bg-white/10 px-4 py-2 text-body-sm font-semibold text-white backdrop-blur-sm hover:bg-white/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                     >
                       {live ? "Live Demo" : "Coming Soon"}
                     </button>
@@ -82,27 +80,27 @@ export default function ProjectsPage() {
                 <div className="px-4 py-4">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h3 className="font-semibold text-neutral-900">{project.title}</h3>
+                      <h3 className="font-semibold text-ar-foreground">{project.title}</h3>
                       <div className="flex items-center gap-2 mt-1">
-                        <Badge variant="secondary" className="text-xs">{project.badge}</Badge>
+                        <Tag variant="subtle" size="sm">{project.badge}</Tag>
                         <div className="flex items-center gap-1">
                           <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
-                          <span className="text-xs text-neutral-500">{project.rating}</span>
+                          <span className="text-caption text-ar-fg-muted">{project.rating}</span>
                         </div>
                       </div>
                     </div>
                     <div className="text-right shrink-0">
-                      <div className="font-bold text-neutral-900 text-sm">{project.price}</div>
-                      <div className="text-xs text-neutral-400">one-time</div>
+                      <div className="font-bold text-ar-foreground text-body-sm">{project.price}</div>
+                      <div className="text-caption text-ar-fg-subtle">one-time</div>
                     </div>
                   </div>
-                  <p className="mt-2 text-xs text-neutral-500 line-clamp-2">{project.description}</p>
+                  <p className="mt-2 text-caption text-ar-fg-muted line-clamp-2">{project.description}</p>
                 </div>
               </div>
             )
           })}
         </div>
-      </div>
+      </Container>
     </div>
   )
 }

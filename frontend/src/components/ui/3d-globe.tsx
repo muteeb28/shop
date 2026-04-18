@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useMemo, useState, useCallback, Suspense } from "react";
+import React, { useRef, useMemo, useState, useCallback, Suspense, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, Html, useTexture } from "@react-three/drei";
 import * as THREE from "three";
@@ -503,6 +503,18 @@ const defaultConfig: Required<Globe3DConfig> = {
   backgroundColor: null,
 };
 
+function isWebGLSupported(): boolean {
+  try {
+    const canvas = document.createElement("canvas");
+    return !!(
+      window.WebGLRenderingContext &&
+      (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function Globe3D({
   markers = [],
   config = {},
@@ -514,6 +526,22 @@ export function Globe3D({
     () => ({ ...defaultConfig, ...config }),
     [config],
   );
+
+  const [webglSupported, setWebglSupported] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    setWebglSupported(isWebGLSupported());
+  }, []);
+
+  if (webglSupported === null) return null;
+
+  if (!webglSupported) {
+    return (
+      <div className={cn("relative h-[500px] w-full flex items-center justify-center", className)}>
+        <p className="text-sm text-neutral-400">3D globe requires WebGL support.</p>
+      </div>
+    );
+  }
 
   return (
     <div className={cn("relative h-[500px] w-full", className)}>

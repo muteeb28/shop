@@ -1,50 +1,146 @@
 @config "../../tailwind.config.js";
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   DESIGN SYSTEM — CSS Custom Properties
+   ─────────────────────────────────────────────────────────────────────────────
+   Two token layers live here:
+
+   1. LEGACY tokens  (--background, --foreground, --primary, …)
+      Consumed by CRM pages, modals, and existing components.
+      Values are unchanged. Do NOT edit these until Phase 4 cleanup.
+
+   2. ARCHIO tokens  (--ar-*)
+      Single source of truth for the Archio revamp.
+      Every new section component MUST resolve to one of these.
+      No raw hex, no hardcoded px, no one-off Tailwind arbitrary values
+      in any component written after Phase 1.
+───────────────────────────────────────────────────────────────────────────── */
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
+    /* ── 1. LEGACY TOKENS — unchanged, backward-compatible ─────────────────── */
+    --background:             0 0% 100%;
+    --foreground:             222.2 84% 4.9%;
+    --card:                   0 0% 100%;
+    --card-foreground:        222.2 84% 4.9%;
+    --popover:                0 0% 100%;
+    --popover-foreground:     222.2 84% 4.9%;
+    --primary:                222.2 47.4% 11.2%;
+    --primary-foreground:     210 40% 98%;
+    --secondary:              210 40% 96%;
+    --secondary-foreground:   222.2 47.4% 11.2%;
+    --muted:                  210 40% 96%;
+    --muted-foreground:       215.4 16.3% 46.9%;
+    --accent:                 210 40% 96%;
+    --accent-foreground:      222.2 47.4% 11.2%;
+    --destructive:            0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
+    --border:                 214.3 31.8% 91.4%;
+    --input:                  214.3 31.8% 91.4%;
+    --ring:                   222.2 84% 4.9%;
+    --radius:                 0.5rem;
+
+    /* ── 2. ARCHIO DESIGN TOKENS ────────────────────────────────────────────── */
+    /*
+      Font decision (recorded here per Phase 0 plan):
+        CHOSEN  → Playfair Display (display) + DM Sans (body)
+                  Already loaded in layout.tsx. Playfair gives Archio's
+                  editorial serif quality without an extra network request.
+        ALT     → Cormorant Garamond — more classical, thinner strokes,
+                  higher contrast. More luxury feel but harder to read
+                  at body sizes. Available via next/font/google if needed.
+    */
+
+    /* ── Color: Backgrounds & Surfaces ───────────────────────────────────────
+       HSL channel values only (no hsl() wrapper).
+       Used as: hsl(var(--ar-background)) or with alpha: hsl(var(--ar-background) / 0.5)
+    */
+    --ar-background:      35 33% 94%;   /* #F5F1EB — warm cream, page body bg      */
+    --ar-surface:         41 56% 98%;   /* #FDFBF7 — card / panel surface          */
+    --ar-surface-muted:   40 22% 90%;   /* #E9E4DB — inset rows, striped bg        */
+
+    /* ── Color: Text ─────────────────────────────────────────────────────────*/
+    --ar-foreground:       0  0%  7%;   /* #121212 — near-black body + headings    */
+    --ar-fg-muted:        60  2% 42%;   /* #6B6B66 — secondary text, captions      */
+    --ar-fg-subtle:       40  5% 63%;   /* #A8A49A — placeholder, disabled, meta   */
+
+    /* ── Color: Borders ──────────────────────────────────────────────────────*/
+    --ar-border:          38 20% 86%;   /* #DDD8CE — hairline card / divider       */
+    --ar-border-strong:   38 14% 76%;   /* #C3BEB4 — stronger section dividers     */
+
+    /* ── Color: Primary Accent (forest green — icons, tags, highlights) ────*/
+    --ar-accent:         149 41% 12%;   /* #122b1e — icon tint, tag bg, selection  */
+    --ar-accent-fg:       35 33% 94%;   /* = --ar-background — text on accent      */
+
+    /* ── Color: Button Primary (deeper pure-green — CTA buttons) ────────────
+       Deliberately separate from --ar-accent so button bg and icon/tag
+       accent can diverge without breaking each other.
+       #1A2E1A = HSL(120 28% 14%)  — deep warm forest green, NOT teal
+       #1F3820 = HSL(120 28% 17%)  — hover: ~3pt lighter
+    ── */
+    --ar-btn-primary:       120 28% 14%;   /* #1A2E1A — CTA button resting bg         */
+    --ar-btn-primary-hover: 120 28% 17%;   /* #1F3820 — CTA button hover bg           */
+
+    /* ── Color: Soft Accent (secondary buttons, tag pills) ──────────────────*/
+    --ar-accent-soft:     47 42% 88%;   /* #EDE7D3 — secondary pill bg             */
+    --ar-accent-soft-fg: 149 41% 12%;   /* = --ar-accent — text on soft accent     */
+
+    /* ── Color: Inverse (dark CTA / testimonial bands) ──────────────────────*/
+    --ar-inverse:        154 30%  8%;   /* #0D1A12 — dark section bg               */
+    --ar-inverse-fg:      35 33% 94%;   /* = --ar-background — text on inverse     */
+
+    /* ── Radii ───────────────────────────────────────────────────────────────*/
+    --ar-radius-sm:   6px;    /* tags, badges, inputs                              */
+    --ar-radius-md:  12px;    /* small cards, dropdowns                            */
+    --ar-radius-lg:  20px;    /* standard cards                                    */
+    --ar-radius-xl:  28px;    /* large panels, image cards                         */
+    --ar-radius-pill: 999px;  /* avatar stacks, nav pill                           */
+
+    /* ── Shadows — quiet; borders do the heavy lifting ──────────────────────*/
+    --ar-shadow-sm:  0 1px 4px 0 hsl(38 10% 20% / 0.06);
+    --ar-shadow-md:  0 4px 16px 0 hsl(38 10% 20% / 0.08);
+    --ar-shadow-lg:  0 12px 40px 0 hsl(38 10% 20% / 0.10);
+
+    /* ── Motion ──────────────────────────────────────────────────────────────*/
+    --ar-ease-out-soft:    cubic-bezier(0.22, 1, 0.36, 1);
+    --ar-ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+    --ar-duration-fast:   150ms;
+    --ar-duration-base:   250ms;
+    --ar-duration-slow:   450ms;
+    --ar-marquee-duration:  40s;   /* used by MarqueeStrip component              */
+
+    /* ── Layout ──────────────────────────────────────────────────────────────*/
+    --ar-max-w-content: 1280px;
+    --ar-section-py-sm:    4rem;   /*  64px — compact / paired sections            */
+    --ar-section-py-md:    6rem;   /*  96px — standard landing sections            */
+    --ar-section-py-lg:    8rem;   /* 128px — hero-adjacent or statement sections  */
   }
 
+  /* ── Legacy dark mode — kept for existing CRM / modal components ──────────
+     Archio tokens (--ar-*) intentionally have no dark overrides.
+     Archio is a light-mode design. Dark parity is Phase 4 scope.
+  ── */
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
+    --background:             222.2 84% 4.9%;
+    --foreground:             210 40% 98%;
+    --card:                   222.2 84% 4.9%;
+    --card-foreground:        210 40% 98%;
+    --popover:                222.2 84% 4.9%;
+    --popover-foreground:     210 40% 98%;
+    --primary:                210 40% 98%;
+    --primary-foreground:     222.2 47.4% 11.2%;
+    --secondary:              217.2 32.6% 17.5%;
+    --secondary-foreground:   210 40% 98%;
+    --muted:                  217.2 32.6% 17.5%;
+    --muted-foreground:       215 20.2% 65.1%;
+    --accent:                 217.2 32.6% 17.5%;
+    --accent-foreground:      210 40% 98%;
+    --destructive:            0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border:                 217.2 32.6% 17.5%;
+    --input:                  217.2 32.6% 17.5%;
+    --ring:                   212.7 26.8% 83.9%;
   }
 }
 
@@ -52,15 +148,68 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans), system-ui, sans-serif;
   }
+
   button, a, [role="button"], select, label[for] {
     cursor: pointer;
+  }
+
+  .font-display {
+    font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+  }
+
+  /*
+    Hero italic serif accent — SCOPED to first section only.
+    Original selector was bare `h1 span` which bled into all sections.
+    Hero is read-only so we narrow via structural selector instead of a class.
+    Phase 4 will replace this with a hero-specific class once Hero is in scope.
+  */
+  section:first-of-type h1 span {
+    font-style: italic;
+    color: #1C3D2C;
+  }
+  .dark section:first-of-type h1 span {
+    color: #4ade80;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
 @layer utilities {
+  /* ── Button shadow stack — 3D "lift" effect on primary CTAs ─────────────
+     Three separate utility classes so Tailwind JIT can apply them with
+     hover: / active: state variants in CVA strings.
+     Cannot use multi-layer box-shadow via Tailwind arbitrary values.
+  ── */
+  .button-primary-shadow {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 2px 4px  rgba(0, 0, 0, 0.15),
+      0 4px 16px rgba(0, 0, 0, 0.10);
+  }
+  .button-primary-shadow-hover {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.10),
+      0 3px 6px  rgba(0, 0, 0, 0.18),
+      0 6px 20px rgba(0, 0, 0, 0.12);
+  }
+  .button-primary-shadow-active {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 1px 3px  rgba(0, 0, 0, 0.20);
+  }
+
+
+  /* ── Scrollbar ────────────────────────────────────────────────────────────*/
   .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -69,25 +218,52 @@
     display: none;
   }
 
+  /* ── Legacy grid texture (used by existing components) ───────────────────*/
   .bg-grid-slate {
-    background-image: linear-gradient(rgba(15, 23, 42, 0.08) 1px, transparent 1px),
+    background-image:
+      linear-gradient(rgba(15, 23, 42, 0.08) 1px, transparent 1px),
       linear-gradient(90deg, rgba(15, 23, 42, 0.08) 1px, transparent 1px);
     background-position: center;
     background-size: 32px 32px;
   }
 
+  /* ── Marquee animations ──────────────────────────────────────────────────*/
   @keyframes marquee {
-    0% { transform: translateX(0); }
+    0%   { transform: translateX(0); }
     100% { transform: translateX(-50%); }
   }
-  
+
+  @keyframes marquee-rtl {
+    0%   { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+
+  /* Left-to-right (default) — existing ProjectsGrid uses this */
   .marquee-track {
-    animation: marquee 30s linear infinite;
+    animation: marquee var(--ar-marquee-duration, 40s) linear infinite;
     display: flex;
     width: max-content;
   }
-  
-  .marquee-track:hover {
+
+  /* Right-to-left — used by trust / tag marquee strips */
+  .marquee-track-reverse {
+    animation: marquee-rtl var(--ar-marquee-duration, 40s) linear infinite;
+    display: flex;
+    width: max-content;
+  }
+
+  .marquee-track:hover,
+  .marquee-track-reverse:hover {
     animation-play-state: paused;
+  }
+
+  /* ── Noise grain (hero reads this via .hero-grain) ───────────────────────*/
+  .hero-grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.4;
   }
 }

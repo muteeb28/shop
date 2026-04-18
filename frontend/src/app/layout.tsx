@@ -1,12 +1,25 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { DM_Sans, Playfair_Display } from 'next/font/google'
 
-const inter = Inter({ subsets: ['latin'] })
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',
+})
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-display',
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
-  title: 'Shop App',
-  description: 'A modern e-commerce application',
+  title: 'Jobflix — Ship Apps in Days',
+  description: 'Turn your idea into a live, production-ready product in days.',
 }
 
 import { SiteNavbar } from "@/components/sections/SiteNavbar"
@@ -18,8 +31,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${dmSans.variable} ${playfair.variable} font-sans`}>
         <SiteNavbar />
         {children}
         <SiteFooter />

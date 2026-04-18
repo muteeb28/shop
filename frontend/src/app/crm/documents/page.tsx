@@ -15,12 +15,20 @@ const mockClients = [
   { id: 5, name: 'David Lee', company: 'Digital Dynamics' }
 ]
 
+interface UploadedFile {
+  id: number
+  name: string
+  size: string
+  type: string
+  file: File
+}
+
 export default function DocumentsPage() {
   const [selectedClient, setSelectedClient] = useState('')
-  const [uploadedFiles, setUploadedFiles] = useState([])
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
   const [dragActive, setDragActive] = useState(false)
 
-  const handleDrag = (e) => {
+  const handleDrag = (e: React.DragEvent | React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
     if (e.type === 'dragenter' || e.type === 'dragover') {
@@ -30,7 +38,7 @@ export default function DocumentsPage() {
     }
   }
 
-  const handleDrop = (e) => {
+  const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
     setDragActive(false)
@@ -40,28 +48,28 @@ export default function DocumentsPage() {
     }
   }
 
-  const handleFileInput = (e) => {
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       handleFiles(e.target.files)
     }
   }
 
-  const handleFiles = (files) => {
-    const newFiles = Array.from(files).map((file) => ({
+  const handleFiles = (files: FileList) => {
+    const newFiles: UploadedFile[] = Array.from(files).map((file) => ({
       id: Date.now() + Math.random(),
       name: file.name,
       size: (file.size / 1024 / 1024).toFixed(2) + ' MB',
-      type: file.name.split('.').pop().toUpperCase(),
+      type: file.name.split('.').pop()?.toUpperCase() || 'UNKNOWN',
       file: file
     }))
     setUploadedFiles([...uploadedFiles, ...newFiles])
   }
 
-  const removeFile = (id) => {
+  const removeFile = (id: number) => {
     setUploadedFiles(uploadedFiles.filter((file) => file.id !== id))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (uploadedFiles.length === 0 || !selectedClient) {
       alert('Please select a client and upload at least one file')

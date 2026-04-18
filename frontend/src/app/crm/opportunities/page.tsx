@@ -64,7 +64,7 @@ export default function OpportunitiesPage() {
     opp.client.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  const getStageColor = (stage) => {
+  const getStageColor = (stage: string) => {
     switch (stage) {
       case 'Discovery': return 'bg-blue-500 text-white'
       case 'Proposal': return 'bg-purple-500 text-white'
@@ -75,7 +75,7 @@ export default function OpportunitiesPage() {
     }
   }
 
-  const getProbabilityColor = (prob) => {
+  const getProbabilityColor = (prob: number) => {
     if (prob >= 75) return 'text-green-600'
     if (prob >= 50) return 'text-yellow-600'
     return 'text-red-600'

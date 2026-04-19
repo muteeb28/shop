@@ -165,7 +165,7 @@ export function SiteNavbar() {
               {item.name}
             </a>
           ))}
-          <Button variant="ar-primary" size="ar-sm" className="ml-2 whitespace-nowrap" asChild>
+          <Button variant="ar-primary" size="sm" className="ml-2 whitespace-nowrap font-semibold" asChild>
             <a href="#contact">Get Started</a>
           </Button>
         </div>

@@ -12,7 +12,7 @@ const DOUBLED_CARDS = [...SHARWINGS_PROJECTS, ...SHARWINGS_PROJECTS]
 
 type CardData = typeof SHARWINGS_PROJECTS[0]
 
-function ProjectCard({ card }: { card: CardData }) {
+function ProjectCard({ card, priority = false }: { card: CardData; priority?: boolean }) {
   return (
     <div className="flex flex-col bg-ar-surface dark:bg-neutral-900 border border-ar-border dark:border-neutral-800 rounded-ar-md overflow-hidden w-[280px] md:w-[360px] flex-shrink-0 mx-3 transition-shadow duration-ar-base hover:shadow-ar-md">
       {/* Preview image */}
@@ -21,6 +21,7 @@ function ProjectCard({ card }: { card: CardData }) {
           src={`/previews/${card.name}.jpg`}
           alt={`Preview of ${card.title}`}
           fill
+          priority={priority}
           className="object-cover object-top"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 360px"
         />
@@ -62,7 +63,7 @@ function ProjectCard({ card }: { card: CardData }) {
 
 export function ProjectsGrid() {
   return (
-    <section className="bg-ar-background dark:bg-neutral-950 py-20 overflow-hidden">
+    <section className="bg-ar-background dark:bg-neutral-950 pt-20 pb-6 overflow-hidden">
 
       {/* Section header */}
       <Container className="mb-12">
@@ -77,7 +78,14 @@ export function ProjectsGrid() {
       <div className="w-full overflow-hidden pb-10">
         <div className="marquee-track">
           {DOUBLED_CARDS.map((project, idx) => (
-            <ProjectCard key={idx} card={project} />
+            <ProjectCard
+              key={idx}
+              card={project}
+              // First ~4 cards are visible in the initial viewport on desktop.
+              // Only mark the original set (idx < SHARWINGS_PROJECTS.length) —
+              // the duplicate set never appears on first render.
+              priority={idx < 4}
+            />
           ))}
         </div>
       </div>

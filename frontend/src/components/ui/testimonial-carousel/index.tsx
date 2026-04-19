@@ -25,24 +25,25 @@ export function TestimonialCarousel({
   interval = 5000,
   className,
 }: TestimonialCarouselProps) {
-  const trackRef    = useRef<HTMLDivElement>(null)
-  const timerRef    = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const [active, setActive]   = useState(0)
-  const [paused, setPaused]   = useState(false)
+  const trackRef   = useRef<HTMLDivElement>(null)
+  const wrapRef    = useRef<HTMLDivElement>(null)
+  const [active, setActive] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const [inView, setInView] = useState(false)
   const shouldReduce = useReducedMotion()
   const count = testimonials.length
 
-  /* ── Scroll to card by index ── */
+  /* ── Scroll within the track only — never touch page scroll ── */
   const scrollTo = useCallback(
     (index: number) => {
       const track = trackRef.current
       if (!track) return
       const card = track.children[index] as HTMLElement | undefined
       if (!card) return
-      card.scrollIntoView({
+      /* Use track.scrollTo so only the carousel scrolls, not the page */
+      track.scrollTo({
+        left: card.offsetLeft,
         behavior: shouldReduce ? "instant" : "smooth",
-        block: "nearest",
-        inline: "center",
       })
       setActive(index)
     },
@@ -52,14 +53,26 @@ export function TestimonialCarousel({
   const prev = () => scrollTo((active - 1 + count) % count)
   const next = () => scrollTo((active + 1) % count)
 
+  /* ── Only auto-advance when the section is actually visible ── */
+  useEffect(() => {
+    const el = wrapRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.2 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
   /* ── Auto-advance ── */
   useEffect(() => {
-    if (!autoAdvance || shouldReduce || paused || count <= 1) return
-    timerRef.current = setTimeout(() => scrollTo((active + 1) % count), interval)
-    return () => { if (timerRef.current) clearTimeout(timerRef.current) }
-  }, [autoAdvance, shouldReduce, paused, active, count, interval, scrollTo])
+    if (!autoAdvance || shouldReduce || paused || !inView || count <= 1) return
+    const t = setTimeout(() => scrollTo((active + 1) % count), interval)
+    return () => clearTimeout(t)
+  }, [autoAdvance, shouldReduce, paused, inView, active, count, interval, scrollTo])
 
-  /* ── IntersectionObserver: update active index on scroll ── */
+  /* ── Sync active dot when user swipes manually ── */
   useEffect(() => {
     const track = trackRef.current
     if (!track) return
@@ -88,6 +101,7 @@ export function TestimonialCarousel({
 
   return (
     <div
+      ref={wrapRef}
       className={cn("relative", className)}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -105,7 +119,7 @@ export function TestimonialCarousel({
           "flex gap-5 overflow-x-auto",
           "snap-x snap-mandatory",
           "scrollbar-none",
-          "pb-1"   /* prevents card shadows from clipping */
+          "pb-1"
         )}
       >
         {testimonials.map((t, i) => (
@@ -114,7 +128,6 @@ export function TestimonialCarousel({
             {...t}
             className={cn(
               "snap-center shrink-0",
-              /* responsive widths: 1 card mobile, 2 tablet, 3 desktop */
               "w-[88%] sm:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)]"
             )}
           />
@@ -124,17 +137,10 @@ export function TestimonialCarousel({
       {/* ── Controls: arrows + dot indicators ── */}
       {count > 1 && (
         <div className="flex items-center justify-center gap-3 mt-6">
-          {/* Prev arrow */}
-          <Button
-            variant="ar-ghost"
-            size="ar-sm"
-            onClick={prev}
-            aria-label="Previous testimonial"
-          >
+          <Button variant="ar-ghost" size="ar-sm" onClick={prev} aria-label="Previous testimonial">
             <ChevronLeft className="w-4 h-4" />
           </Button>
 
-          {/* Dot indicators */}
           <div className="flex items-center gap-2" aria-hidden>
             {testimonials.map((_, i) => (
               <button
@@ -151,13 +157,7 @@ export function TestimonialCarousel({
             ))}
           </div>
 
-          {/* Next arrow */}
-          <Button
-            variant="ar-ghost"
-            size="ar-sm"
-            onClick={next}
-            aria-label="Next testimonial"
-          >
+          <Button variant="ar-ghost" size="ar-sm" onClick={next} aria-label="Next testimonial">
             <ChevronRight className="w-4 h-4" />
           </Button>
         </div>

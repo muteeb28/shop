@@ -6,6 +6,7 @@ import { WhyChooseUsBento } from "@/components/why-choose-us-bento"
 import Globe3DDemo from "@/components/3d-globe-demo"
 import { BuildCustomProjectModal } from "@/components/BuildCustomProjectModal"
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection"
+import { FaqSection }          from "@/components/sections/FaqSection"
 
 import { useRouter } from "next/navigation"
 
@@ -54,6 +55,10 @@ export default function Home() {
         <div id="about">
           <WhyChooseUsBento />
         </div>
+        <div id="faq">
+          <FaqSection onGetStarted={() => setModalOpen(true)} />
+        </div>
+
         <Globe3DDemo />
 
       </main>

@@ -16,7 +16,7 @@ const buttonVariants = cva(
         /* ── Archio primary — deep forest-green pill with 3D lift ─────────── */
         primary: [
           "rounded-ar-pill",
-          "bg-ar-btn-primary text-ar-accent-fg",
+          "bg-ar-btn-primary text-white",
           "button-primary-shadow",
           "hover:bg-ar-btn-primary-hover hover:button-primary-shadow-hover hover:-translate-y-px",
           "active:button-primary-shadow-active active:translate-y-0",
@@ -56,7 +56,7 @@ const buttonVariants = cva(
         /* ── ar-* aliases — backward compat for existing code ─────────────── */
         "ar-primary": [
           "rounded-ar-pill",
-          "bg-ar-btn-primary text-ar-accent-fg",
+          "bg-ar-btn-primary text-white",
           "button-primary-shadow",
           "hover:bg-ar-btn-primary-hover hover:button-primary-shadow-hover hover:-translate-y-px",
           "active:button-primary-shadow-active active:translate-y-0",

@@ -33,9 +33,9 @@ export function TestimonialsSection({ onGetStarted }: TestimonialsSectionProps) 
         }
 
   return (
-    <section className="bg-ar-background dark:bg-neutral-950 py-24 overflow-hidden">
+    <section className="bg-ar-background dark:bg-neutral-950 pt-6 pb-10 overflow-hidden">
       <Container>
-        <div className="flex flex-col gap-14">
+        <div className="flex flex-col gap-10">
 
           {/* ── 1. Section header ── */}
           <motion.div {...fadeUp(0)}>

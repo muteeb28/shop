@@ -137,6 +137,61 @@ export const projects: Project[] = [
     features: ["Discounted Flights", "Agent Dashboard", "Partner Network", "Travel Services"]
   },
   {
+    id: "cadhauz",
+    title: "CADHAUZ",
+    description: "Builder discovery platform for homeowners with project browsing, service discovery, and trust-building content.",
+    icon: Home,
+    price: "₹40,000",
+    previewUrl: "https://www.cadhauz.com/",
+    badge: "New",
+    rating: 4.9,
+    features: ["Builder Discovery", "Homeowner Focus", "Service Listings", "Modern UI"]
+  },
+  {
+    id: "baraem-school",
+    title: "Baraem Al Ain School",
+    description: "A school website focused on admissions, academic programs, events, and parent communication.",
+    icon: BookOpen,
+    price: "₹38,000",
+    previewUrl: "https://baraemabudhabi.ae/",
+    badge: "Education",
+    rating: 4.9,
+    features: ["Admissions Flow", "Program Pages", "Events Showcase", "Responsive Design"]
+  },
+  {
+    id: "tourtravel-al-ain",
+    title: "TourTravel Al Ain",
+    description: "Travel website for showcasing destination packages, itinerary options, and inquiry-ready booking journeys.",
+    icon: Plane,
+    price: "₹42,000",
+    previewUrl: "https://tourtravel-al-ain.vercel.app/",
+    badge: "Travel",
+    rating: 4.9,
+    features: ["Package Listings", "Destination Showcase", "Inquiry Funnel", "Mobile Friendly"]
+  },
+  {
+    id: "realestate-demo-framer",
+    title: "RealEstate Demo Framer",
+    description: "Real estate showcase with modern property presentation, conversion-focused layout, and smooth interactions.",
+    icon: Home,
+    price: "₹48,000",
+    previewUrl: "https://realestate-demo-framer.vercel.app/",
+    badge: "Real Estate",
+    rating: 4.9,
+    features: ["Property Showcase", "Lead Capture", "Modern Layout", "Fast UX"]
+  },
+  {
+    id: "sharwings-store",
+    title: "Sharwings Store",
+    description: "Production e-commerce storefront for electrical products with category navigation and conversion-first shopping flow.",
+    icon: ShoppingCart,
+    price: "₹35,000",
+    previewUrl: "https://sharwings.in/",
+    badge: "Popular",
+    rating: 4.9,
+    features: ["Category Catalog", "Secure Checkout", "Product Discovery", "Fast Delivery Flow"]
+  },
+  {
     id: "color-palettes",
     title: "Colour Palette Picker",
     description: "Browse and select colors from a rich palette map with random color generation and instant preview.",

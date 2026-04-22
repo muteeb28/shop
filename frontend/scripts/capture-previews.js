@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
 const fs = require('fs');
+const { execSync } = require('child_process');
 
 const PROJECTS = [
   { name: 'sharwings-ecommerce', url: 'https://sharwings-kvqz.vercel.app/' },
@@ -18,14 +19,54 @@ const PROJECTS = [
   { name: 'trip-impression', url: 'https://tripimpression.vercel.app/' },
 ];
 
+function isMissingChromeError(error) {
+  const message = String(error && error.message ? error.message : error);
+  return (
+    message.includes('Could not find Chrome') ||
+    message.includes('Failed to launch the browser process')
+  );
+}
+
+function tryInstallChrome() {
+  try {
+    console.log('Chrome not found for Puppeteer. Installing browser binary...');
+    execSync('npx puppeteer browsers install chrome', { stdio: 'inherit' });
+    return true;
+  } catch (error) {
+    console.warn('Chrome install failed. Continuing build without preview capture.');
+    console.warn(`Reason: ${error.message}`);
+    return false;
+  }
+}
+
+async function createBrowser() {
+  try {
+    return await puppeteer.launch({
+      headless: 'new',
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+    });
+  } catch (error) {
+    if (!isMissingChromeError(error)) throw error;
+    const installed = tryInstallChrome();
+    if (!installed) return null;
+    return puppeteer.launch({
+      headless: 'new',
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+    });
+  }
+}
+
 (async () => {
+  if (process.env.SKIP_PREVIEW_CAPTURE === '1') {
+    console.log('Skipping preview capture (SKIP_PREVIEW_CAPTURE=1).');
+    return;
+  }
+
   const dir = path.join(__dirname, '../public/previews');
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
-  const browser = await puppeteer.launch({
-    headless: 'new',
-    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
-  });
+  const browser = await createBrowser();
+  if (!browser) return;
 
   for (const project of PROJECTS) {
     // Skip if already captured
@@ -55,4 +96,8 @@ const PROJECTS = [
 
   await browser.close();
   console.log('\n\u2705 Done. Check public/previews/');
-})();
+})().catch((error) => {
+  // Do not fail production build for preview generation issues.
+  console.warn('Preview capture failed, continuing build.');
+  console.warn(error.message);
+});

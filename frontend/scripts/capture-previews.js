@@ -17,6 +17,11 @@ const PROJECTS = [
   { name: 'portfolio', url: 'https://muteebmasoodi.vercel.app/' },
   { name: 'resume-optimizer', url: 'https://resume-optimizer-delta.vercel.app/' },
   { name: 'trip-impression', url: 'https://tripimpression.vercel.app/' },
+  { name: 'cadhauz', url: 'https://www.cadhauz.com/' },
+  { name: 'baraem-abudhabi', url: 'https://baraemabudhabi.ae/' },
+  { name: 'tourtravel-al-ain', url: 'https://tourtravel-al-ain.vercel.app/' },
+  { name: 'realestate-demo-framer', url: 'https://realestate-demo-framer.vercel.app/' },
+  { name: 'sharwings-store', url: 'https://sharwings.in/' },
 ];
 
 function isMissingChromeError(error) {
